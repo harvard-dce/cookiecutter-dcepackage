@@ -3,10 +3,26 @@
 
 from setuptools import setup
 
-with open('README.rst') as readme_file:
+import os
+import re
+import codecs
+def read_version():
+    version_file = codecs.open(
+            os.path.join(
+                os.path.abspath(os.path.dirname(__file__)),
+                '{{ cookiecutter.project_slug }}/__init__.py'),
+            'r', 'utf-8' ).read()
+    return re.search(
+            r"^__version__ = ['\"]([^'\"]*)['\"]",
+            version_file, re.M ).group(1)
+
+version = read_version()
+
+
+with open('README.md') as readme_file:
     readme = readme_file.read()
 
-with open('HISTORY.rst') as history_file:
+with open('HISTORY.md') as history_file:
     history = history_file.read()
 
 requirements = [
@@ -25,12 +41,13 @@ test_requirements = [
     'BSD license': 'License :: OSI Approved :: BSD License',
     'ISC license': 'License :: OSI Approved :: ISC License (ISCL)',
     'Apache Software License 2.0': 'License :: OSI Approved :: Apache Software License',
+    'DCE Apache Software License 2.0': 'License :: OSI Approved :: Apache Software License',
     'GNU General Public License v3': 'License :: OSI Approved :: GNU General Public License'
 } %}
 
 setup(
     name='{{ cookiecutter.project_slug }}',
-    version='{{ cookiecutter.version }}',
+    version=version,
     description="{{ cookiecutter.project_short_description }}",
     long_description=readme + '\n\n' + history,
     author="{{ cookiecutter.full_name.replace('\"', '\\\"') }}",
